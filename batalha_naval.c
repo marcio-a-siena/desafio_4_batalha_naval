@@ -205,7 +205,9 @@ void exibe_tabuleiro_ou_habilidades (int o_que)
         
         if (valor_navio == 0 && valor_habilidade == 0) {
           numero_exibido = 0;
-        } else if (valor_navio != 0) {
+        } else if (valor_navio == 0 && valor_habilidade != 0) {
+          numero_exibido = 1;
+        } else if (valor_navio != 0 && valor_habilidade == 0) {
           numero_exibido = 3;
         } else {
           numero_exibido = 5;
