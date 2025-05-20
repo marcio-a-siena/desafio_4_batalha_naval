@@ -11,12 +11,12 @@ CONSIDERAÇÕES
 
 
 Última versão:
-Versão 2 - nível Aventureiro
+Versão 1 - nível Novato
 
 Mensagem de commit (para referência):
-Desafio: nível Aventureiro
+Desafio: nível Novato
 Batalha Naval
-Esta é a versão final do nível Aventureiro.
+Esta é a versão final do nível Novato.
 */
 
 
@@ -35,10 +35,8 @@ Esta é a versão final do nível Aventureiro.
 #define ULTIMA_COLUNA_PARA_INSERCAO (COLUNAS - TAMANHO_NAVIO)
 
 // Tipos de navios
-#define NAVIO_TIPO_HORIZONTAL 1 // Horizontal
-#define NAVIO_TIPO_VERTICAL 2   // Vertical
-#define NAVIO_TIPO_DIAG_E_D 3   // Diagonal de cima para baixo, esquerda para direita
-#define NAVIO_TIPO_DIAG_D_E 4   // Diagonal de cima para baixo, direita para esquerda
+#define NAVIO_TIPO_HORIZONTAL 1
+#define NAVIO_TIPO_VERTICAL 2
 
 
 void exibe_tabuleiro (void);
@@ -73,11 +71,9 @@ NAVIOS
 
 Cada navio é representado por um array de 6 inteiros:
 
-[0] = a direcao (tipo) do navio:
+[0] = a direcao:
 - 1 = inserção na horizontal, da esquerda para a direita;
 - 2 = inserção vertical, de cima para baixo;
-- 3 = inserção diagonal de cima para baixo, esquerda para direita;
-- 4 = inserção diagonal de cima para baixo, direita para esquerda.
 
 [1] = linha: número da linha da primeira casa, a partir de 0.
 
@@ -88,11 +84,8 @@ Cada navio é representado por um array de 6 inteiros:
 Uma melhor representação seria o uso de structs encapsuladas em módulos,
 mas o problema pede que arrays sejam usados.
 */
-int navio_1_horizontal[6] = {NAVIO_TIPO_HORIZONTAL, 6, 4,   3, 3, 3}; // navio horizontal   a partir de Linha 6, coluna 4 ("E")
-int navio_2_vertical[6]   = {NAVIO_TIPO_VERTICAL,   3, 3,   3, 3, 3}; // navio vertical     a partir de Linha 3, coluna 3 ("D")
-int navio_3_diag_e_d[6]   = {NAVIO_TIPO_DIAG_E_D,   1, 5,   3, 3, 3}; // navio diagonal e-d a partir de Linha 1, coluna 5 ("F")
-int navio_4_diag_d_e[6]   = {NAVIO_TIPO_DIAG_D_E,   0, 4,   3, 3, 3}; // navio diagonal d-e a partir de Linha 0, coluna 4 ("E")
-
+int navio_1_horizontal[6] = {NAVIO_TIPO_HORIZONTAL, 6, 4,   3, 3, 3}; // navio horizontal a partir de Linha 6, coluna 4 ("E")
+int navio_2_vertical[6]   = {NAVIO_TIPO_VERTICAL,   3, 3,   3, 3, 3}; // navio vertical a partir de Linha 3, coluna 3 ("D")
 
 
 int main ()
@@ -103,8 +96,6 @@ int main ()
 
   if (!insere_navio(navio_1_horizontal)) { return 0; }
   if (!insere_navio(navio_2_vertical))   { return 0; } 
-  if (!insere_navio(navio_3_diag_e_d))   { return 0; } 
-  if (!insere_navio(navio_4_diag_d_e))   { return 0; } 
 
   exibe_tabuleiro();
  
@@ -184,7 +175,7 @@ int insere_navio (int navio[])
   }
 
   // ------------------------------ Horizontal ------------------------------
-  if (direcao == NAVIO_TIPO_HORIZONTAL) {
+  if (direcao == 1) {
     if (coluna > ULTIMA_COLUNA_PARA_INSERCAO) {
       printf("Não é possível inserir na horizontal depois da coluna %d\n", ULTIMA_COLUNA_PARA_INSERCAO);
       return 0;
@@ -200,7 +191,7 @@ int insere_navio (int navio[])
     for (int n = 0; n < TAMANHO_NAVIO; ++n) { tabuleiro[linha][coluna + n] = 3; } // Ok, insere
   }
   // ------------------------------ Vertical ------------------------------
-  else if (direcao == NAVIO_TIPO_VERTICAL) {
+  else if (direcao == 2) {
     if (linha > ULTIMA_LINHA_PARA_INSERCAO ) {
       printf("Não é possível inserir na vertical depois da linha %d\n", ULTIMA_LINHA_PARA_INSERCAO);
       return 0;
@@ -214,38 +205,6 @@ int insere_navio (int navio[])
     }
 
     for (int n = 0; n < TAMANHO_NAVIO; ++n) { tabuleiro[linha + n][coluna] = 3; } // Ok, insere
-  }
-  // ------------------------------ Diagonal E-D ------------------------------
-  else if (direcao == NAVIO_TIPO_DIAG_E_D) {
-    if (linha > ULTIMA_LINHA_PARA_INSERCAO ) {
-      printf("Não é possível inserir na diagonal depois da linha %d\n", ULTIMA_LINHA_PARA_INSERCAO);
-      return 0;
-    }
-
-    if (coluna > ULTIMA_COLUNA_PARA_INSERCAO ) {
-      printf("Não é possível inserir na diagonal depois da coluna %d\n", ULTIMA_COLUNA_PARA_INSERCAO);
-      return 0;
-    }
-
-    for (int n = 0; n < TAMANHO_NAVIO; ++n) { // Ok, testa se posição está disponível
-      if(tabuleiro[linha + n][coluna + n] != 0) {
-        printf("Linha %d, coluna %d já está ocupada\n", linha+n, coluna+n);
-        return 0;
-      }
-    }
-
-    for (int n = 0; n < TAMANHO_NAVIO; ++n) { tabuleiro[linha + n][coluna + n] = 3; } // Ok, insere
-  }
-  // ------------------------------ Diagonal D-E ------------------------------
-  else if (direcao == NAVIO_TIPO_DIAG_D_E) {
-    for (int n = 0; n < TAMANHO_NAVIO; ++n) { // Ok, testa se posição está disponível
-      if(tabuleiro[linha + n][coluna - n] != 0) {
-        printf("Linha %d, coluna %d já está ocupada\n", linha+n, coluna-n);
-        return 0;
-      }
-    }
-
-    for (int n = 0; n < TAMANHO_NAVIO; ++n) { tabuleiro[linha + n][coluna - n] = 3; } // Ok, insere
   }
   // ------------------------------ Erro ------------------------------
   else {
