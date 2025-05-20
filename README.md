@@ -10,9 +10,9 @@ CONSIDERAÇÕES
 
 
 Última versão:
-Versão 2 - nível Aventureiro
+Versão 3 - nível Mestre
 
 Mensagem de commit (para referência):
-Desafio: nível Aventureiro
+Desafio: nível Mestre
 Batalha Naval
-Esta é a versão final do nível Aventureiro.
+Esta é a versão final do nível Mestre.
